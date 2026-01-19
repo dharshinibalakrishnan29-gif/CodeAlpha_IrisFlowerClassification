@@ -1,0 +1,62 @@
+# Iris Flower Classification with Visualization
+
+# Step 1: Import required libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Step 2: Load Iris dataset
+iris = load_iris()
+
+# Convert to DataFrame
+df = pd.DataFrame(
+    iris.data,
+    columns=['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
+)
+df['Species'] = iris.target
+df['Species'] = df['Species'].map({
+    0: 'Setosa',
+    1: 'Versicolor',
+    2: 'Virginica'
+})
+
+# Step 3: Data Visualization (Mapping Plots)
+
+# Scatter Plot
+plt.figure(figsize=(7, 5))
+sns.scatterplot(
+    x='Petal Length',
+    y='Petal Width',
+    hue='Species',
+    data=df
+)
+plt.title('Iris Flower Mapping (Petal Length vs Petal Width)')
+plt.show()
+
+# Pair Plot
+sns.pairplot(df, hue='Species')
+plt.show()
+
+# Step 4: Split data
+X = iris.data
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 5: Train Logistic Regression model
+model = LogisticRegression(max_iter=200)
+model.fit(X_train, y_train)
+
+# Step 6: Prediction
+y_pred = model.predict(X_test)
+
+# Step 7: Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Model Accuracy:", accuracy)
